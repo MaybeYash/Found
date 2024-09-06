@@ -1,15 +1,26 @@
-// Hash provided (ensure it's from bcryptjs for consistency)
-const hash = "$2b$12$OrjMh.MyyiS1/tA9M8Vyz.cy1Vv7cvQKA2xaPtVEwxnZryDwB/SEy";
+document.addEventListener('DOMContentLoaded', function() {
+    const hash = "$2b$12$OrjMh.MyyiS1/tA9M8Vyz.cy1Vv7cvQKA2xaPtVEwxnZryDwB/SEy";
 
-function checkPassword() {
-    const password = document.getElementById('password').value;
+    document.querySelector('button').addEventListener('click', function() {
+        const password = document.getElementById('password').value;
 
-    bcrypt.compare(password, hash, function(err, result) {
-        const resultElement = document.getElementById('result');
-        if (result) {
-            resultElement.textContent = "Password matches the hash!";
-        } else {
-            resultElement.textContent = "Password does not match the hash.";
+        if (!password) {
+            document.getElementById('result').textContent = "Please enter a password.";
+            return;
         }
+
+        bcrypt.compare(password, hash, function(err, result) {
+            if (err) {
+                console.error(err);
+                document.getElementById('result').textContent = "An error occurred.";
+                return;
+            }
+
+            if (result) {
+                document.getElementById('result').textContent = "Password matches the hash!";
+            } else {
+                document.getElementById('result').textContent = "Password does not match the hash.";
+            }
+        });
     });
-}
+});
